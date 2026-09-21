@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Store admin · Perfect Imitation Jewellers</title>
+  <meta name="theme-color" content="#120D0B">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="assets/img/icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+<!-- Login -->
+<main class="login" id="view-login" hidden>
+  <form class="login__card" id="login-form" novalidate>
+    <p class="login__brand">Perfect</p>
+    <h1 class="login__title">Store admin</h1>
+    <p class="login__text">Sign in with the owner email and password.</p>
+    <label class="field">
+      <span>Email</span>
+      <input type="email" name="email" autocomplete="username" required inputmode="email">
+    </label>
+    <label class="field">
+      <span>Password</span>
+      <div class="pw">
+        <input type="password" name="password" autocomplete="current-password" required>
+        <button type="button" class="pw__toggle" aria-label="Show password">Show</button>
+      </div>
+    </label>
+    <p class="form-error" id="login-error" role="alert" hidden></p>
+    <button class="btn btn--gold btn--block" type="submit">Sign in</button>
+    <a class="login__back" href="./">Back to website</a>
+  </form>
+</main>
+
+<!-- Setup notice when Supabase keys are missing -->
+<main class="login" id="view-setup" hidden>
+  <div class="login__card">
+    <p class="login__brand">Perfect</p>
+    <h1 class="login__title">Connect Supabase first</h1>
+    <p class="login__text">Add the Supabase project URL and anon key in <code>assets/js/supabase-config.js</code>, deploy again, then open this page.</p>
+    <a class="btn btn--line btn--block" href="./">Back to website</a>
+  </div>
+</main>
+
+<!-- Dashboard -->
+<div class="app" id="view-app" hidden>
+  <header class="bar">
+    <div>
+      <p class="bar__brand">Perfect</p>
+      <p class="bar__who" id="who"></p>
+    </div>
+    <div class="bar__actions">
+      <a class="btn btn--line btn--sm" href="./" target="_blank" rel="noopener">View site</a>
+      <button class="btn btn--line btn--sm" id="sign-out" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Admin sections">
+    <button role="tab" id="tab-products" aria-controls="panel-products" aria-selected="true">Products &amp; rates</button>
+    <button role="tab" id="tab-exclusive" aria-controls="panel-exclusive" aria-selected="false">Exclusive</button>
+    <button role="tab" id="tab-store" aria-controls="panel-store" aria-selected="false">Store details</button>
+  </nav>
+
+  <!-- Products -->
+  <section class="panel" id="panel-products" role="tabpanel" aria-labelledby="tab-products">
+    <p class="panel__intro">Edit the name, type, uses and wholesale rate of each product. Photos stay the same.</p>
+    <div id="product-forms" class="stack"></div>
+  </section>
+
+  <!-- Exclusive -->
+  <section class="panel" id="panel-exclusive" role="tabpanel" aria-labelledby="tab-exclusive" hidden>
+    <p class="panel__intro">Trending pieces shown in the Exclusive section. The section hides itself when no item is visible.</p>
+
+    <form class="box" id="ex-form" novalidate>
+      <div class="box__head">
+        <h2 class="box__title" id="ex-form-title">Add an exclusive item</h2>
+        <button class="link" type="button" id="ex-cancel" hidden>Cancel edit</button>
+      </div>
+      <div class="uploads">
+        <label class="upload" data-slot="1">
+          <input type="file" accept="image/*" name="image1">
+          <span class="upload__img"></span>
+          <span class="upload__label">Main photo <em>required</em></span>
+        </label>
+        <label class="upload" data-slot="2">
+          <input type="file" accept="image/*" name="image2">
+          <span class="upload__img"></span>
+          <span class="upload__label">Second photo <em>optional</em></span>
+          <button type="button" class="upload__clear" hidden aria-label="Remove second photo">Remove</button>
+        </label>
+      </div>
+      <p class="hint">Photos are cropped to portrait 2:3 and compressed automatically.</p>
+      <label class="field"><span>Item name</span><input name="name" required maxlength="80" placeholder="e.g. Emerald drop kalgi"></label>
+      <label class="field"><span>Type <em>optional</em></span><input name="type" maxlength="60" placeholder="e.g. Safa kalgi"></label>
+      <label class="field"><span>Uses or note <em>optional</em></span><textarea name="note" rows="3" maxlength="400" placeholder="Where and how it is worn"></textarea></label>
+      <div class="row">
+        <label class="field"><span>Rate from (₹)</span><input name="rate_min" inputmode="numeric" maxlength="12"></label>
+        <label class="field"><span>Rate up to (₹)</span><input name="rate_max" inputmode="numeric" maxlength="12"></label>
+      </div>
+      <p class="form-error" id="ex-error" role="alert" hidden></p>
+      <button class="btn btn--gold btn--block" type="submit" id="ex-submit">Add item</button>
+    </form>
+
+    <h2 class="list-title">Current items <span id="ex-count"></span></h2>
+    <ul class="ex-list" id="ex-list"></ul>
+  </section>
+
+  <!-- Store details -->
+  <section class="panel" id="panel-store" role="tabpanel" aria-labelledby="tab-store" hidden>
+    <p class="panel__intro">Shown in the About and Visit sections of the website.</p>
+    <div class="box stack" id="store-form">
+      <label class="field"><span>About text</span><textarea name="about" rows="6" maxlength="900"></textarea></label>
+      <label class="field"><span>Store address</span><textarea name="address" rows="3" maxlength="300"></textarea></label>
+      <label class="field"><span>Opening hours</span><input name="hours" maxlength="80"></label>
+      <label class="field"><span>Google Maps link</span><input name="mapsUrl" type="url" inputmode="url"></label>
+      <div class="row">
+        <label class="field"><span>WhatsApp number (with 91)</span><input name="whatsapp" inputmode="tel" maxlength="15"></label>
+        <label class="field"><span>Instagram username</span><input name="instagram" maxlength="40"></label>
+      </div>
+      <div class="row">
+        <label class="field"><span>Owner name</span><input name="owner" maxlength="60"></label>
+        <label class="field"><span>Since (year)</span><input name="since" inputmode="numeric" maxlength="4"></label>
+      </div>
+    </div>
+  </section>
+
+  <div class="savebar" id="savebar" hidden>
+    <p id="save-state">Unsaved changes</p>
+    <button class="btn btn--gold" id="save" type="button">Save changes</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script type="module" src="assets/js/admin.js"></script>
+</body>
+</html>
