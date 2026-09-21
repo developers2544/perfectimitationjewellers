@@ -4,13 +4,13 @@
   --danger: #E88B7E; --ok: #9FD3A5;
   --line: rgba(230,205,148,.18); --line-strong: rgba(230,205,148,.38);
   --metal: linear-gradient(135deg, #F7E7B4 0%, #D9B46A 38%, #A57B35 70%, #E8CC87 100%);
-  --serif: 'Cormorant Garamond', Georgia, serif;
-  --sans: 'Jost', 'Segoe UI', system-ui, sans-serif;
+  --serif: 'Bodoni Moda', Didot, Georgia, serif;
+  --sans: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
   --pad: clamp(16px, 4vw, 32px);
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; background: var(--velvet); color: var(--ivory); font: 300 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+body { margin: 0; background: var(--velvet); color: var(--ivory); font: 300 15px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--champagne); outline-offset: 2px; border-radius: 6px; }
 code { font-size: .9em; color: var(--champagne); overflow-wrap: anywhere; }
@@ -18,8 +18,8 @@ button { font: inherit; color: inherit; }
 
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  min-height: 48px; padding: 0 22px; border-radius: 999px; border: 0; cursor: pointer;
-  font: 500 15px var(--sans); text-decoration: none; touch-action: manipulation;
+  min-height: 48px; padding: 0 22px; border-radius: 3px; border: 0; cursor: pointer;
+  font: 500 12px var(--sans); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; touch-action: manipulation;
   transition: transform .15s, opacity .2s;
 }
 .btn:active { transform: scale(.97); }
@@ -35,7 +35,7 @@ button { font: inherit; color: inherit; }
 .login { min-height: 100svh; display: grid; place-items: center; padding: 24px var(--pad);
   background: radial-gradient(closest-side at 50% 30%, rgba(214,170,90,.16), transparent 70%), var(--velvet); }
 .login__card { width: 100%; max-width: 400px; display: grid; gap: 16px; padding: 30px 24px; border-radius: 22px; background: var(--velvet-2); box-shadow: inset 0 0 0 1px var(--line); }
-.login__brand { margin: 0; font: italic 600 34px var(--serif); background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.login__brand { margin: 0; font: 500 26px var(--serif); letter-spacing: .28em; background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .login__title { margin: -8px 0 0; font: 500 30px/1.1 var(--serif); }
 .login__text { margin: 0; color: var(--muted); }
 .login__back { text-align: center; color: var(--muted); font-size: 14px; }
@@ -62,7 +62,7 @@ input:focus, textarea:focus { outline: none; box-shadow: inset 0 0 0 1.5px var(-
 .app { max-width: 880px; margin: 0 auto; padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
 .bar { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px;
   padding: calc(12px + env(safe-area-inset-top)) var(--pad) 12px; background: rgba(18,13,11,.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
-.bar__brand { margin: 0; font: italic 600 26px/1 var(--serif); background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.bar__brand { margin: 0; font: 500 19px/1 var(--serif); letter-spacing: .28em; background: var(--metal); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .bar__who { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); max-width: 44vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .bar__actions { display: flex; gap: 8px; }
 

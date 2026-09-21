@@ -23,8 +23,12 @@ function friendly(err) {
   const m = String(err?.message || err || '');
   if (/invalid login credentials/i.test(m)) return 'Email or password is wrong. Check both and try again.';
   if (/failed to fetch|network/i.test(m)) return 'No internet connection. Check your network and try again.';
-  if (/row-level security|permission|jwt|not authorized/i.test(m)) return 'Your session has ended. Sign in again to save.';
-  if (/payload too large|exceeded|size/i.test(m)) return 'This photo is too large. Choose a smaller photo.';
+  if (/jwt expired|invalid jwt|refresh token|session.*(missing|expired)/i.test(m)) return 'Your session has ended. Sign in again to save.';
+  if (/row-level security|violates|permission denied|not authorized|unauthorized|403/i.test(m))
+    return `Supabase blocked this save because a permission rule is missing. Run supabase/fix-permissions.sql in the Supabase SQL Editor, then try again. (Details: ${m})`;
+  if (/bucket not found/i.test(m)) return 'The photo storage bucket "exclusive" is missing. Run supabase/fix-permissions.sql in the Supabase SQL Editor.';
+  if (/relation .* does not exist|could not find the table/i.test(m)) return 'Database tables are missing. Run supabase/schema.sql in the Supabase SQL Editor.';
+  if (/payload too large|exceeded the maximum/i.test(m)) return 'This photo is too large. Choose a smaller photo.';
   return m || 'Something went wrong. Try again.';
 }
 function setBusy(btn, busy, label) {
@@ -135,6 +139,7 @@ function updateSavebar() { $('#savebar').hidden = !(dirty && activeTab() !== 'ta
 
 $('#save').addEventListener('click', async e => {
   const btn = e.currentTarget;
+  if (!(await ensureSession())) return;
   const wa = String(content.whatsapp).replace(/\D/g, '');
   if (wa.length < 10) return toast('Enter a valid WhatsApp number with country code, like 918451087229.', true);
   content.whatsapp = wa;
@@ -219,8 +224,15 @@ function startEdit(item) {
   form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+async function ensureSession() {
+  const session = await getSession().catch(() => null);
+  if (!session) { toast('Your session has ended. Sign in again.', true); view('login'); return false; }
+  return true;
+}
+
 form.addEventListener('submit', async e => {
   e.preventDefault();
+  if (!(await ensureSession())) return;
   const btn = $('#ex-submit'), errBox = $('#ex-error');
   const name = form.name.value.trim();
   if (!name) return showError(errBox, 'Enter the item name.');

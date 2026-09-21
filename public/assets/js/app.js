@@ -157,7 +157,9 @@ function renderProducts() {
         rate: rateText(p.rateMin, p.rateMax), images: imgs, orderHref: orderLink(p.name)
       })
     });
+    card.style.setProperty('--i', i % 3);
     grid.append(card);
+    reveal.observe(card);
     makeSlideshow(card, i);
   });
 }
@@ -180,7 +182,9 @@ function renderExclusive(items) {
         rate: rateText(x.rate_min, x.rate_max), images: imgs, orderHref: orderLink(x.name, true)
       }) : null
     });
+    card.style.setProperty('--i', i % 4);
     rail.append(card);
+    reveal.observe(card);
     makeSlideshow(card, i);
   });
 }
@@ -268,29 +272,94 @@ track.addEventListener('scroll', () => {
   $$('button', dots).forEach((b, k) => b.setAttribute('aria-current', k === i ? 'true' : 'false'));
 }, { passive: true });
 
-/* ================= Owner double tap opens admin ================= */
+/* ================= Owner photo / name: double tap opens admin ================= */
 (() => {
-  const name = $('#owner-name');
   let last = 0;
-  name.addEventListener('pointerup', () => {
+  const go = e => {
     const now = Date.now();
-    if (now - last < 450) { last = 0; location.href = 'admin.html'; }
+    if (now - last < 450) { last = 0; e.preventDefault(); location.href = 'admin.html'; }
     else last = now;
-  });
+  };
+  ['#owner-photo', '#owner-name'].forEach(sel => $(sel)?.addEventListener('pointerup', go));
+  $('#owner-photo')?.addEventListener('contextmenu', e => e.preventDefault());
 })();
 
 /* ================= Top bar + FAB ================= */
 const topbar = $('.topbar');
 const fab = $('.fab');
-const heroEnd = () => $('.hero').offsetHeight * 0.6;
 function onScroll() {
-  topbar.classList.toggle('is-scrolled', scrollY > 8);
-  if (sheet.hidden) fab.classList.toggle('is-hidden', scrollY < heroEnd());
+  topbar.classList.toggle('is-scrolled', scrollY > 10);
+  if (sheet.hidden) fab.classList.toggle('is-hidden', scrollY < innerHeight * 0.7);
 }
 addEventListener('scroll', onScroll, { passive: true });
 
+/* ================= Scroll reveal ================= */
+const reveal = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); reveal.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+function watchReveals() {
+  $$('[data-reveal]').forEach(n => {
+    const sibs = [...n.parentElement.children].filter(c => c.hasAttribute('data-reveal'));
+    n.style.setProperty('--i', Math.max(0, sibs.indexOf(n)));
+    reveal.observe(n);
+  });
+}
+
+/* ================= Intro: the box opens once per session ================= */
+function startIntro() {
+  const root = document.documentElement, intro = $('#intro');
+  const skip = root.classList.contains('no-intro') || reduceMotion;
+  if (skip) { intro?.remove(); document.body.classList.add('is-ready'); return; }
+  document.body.classList.add('is-locked');
+  setTimeout(() => document.body.classList.add('is-ready'), 1500);
+  setTimeout(() => {
+    intro?.remove(); document.body.classList.remove('is-locked');
+    try { sessionStorage.setItem('pij-intro', '1'); } catch {}
+  }, 2500);
+}
+
+/* ================= Gold dust in the hero ================= */
+function startDust() {
+  const c = $('#dust');
+  if (!c || reduceMotion) return;
+  const ctx = c.getContext('2d');
+  let w, h, dpr, parts = [], running = false, raf;
+  const size = () => {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    w = c.clientWidth; h = c.clientHeight;
+    c.width = w * dpr; c.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(70, (w * h) / 16000));
+    parts = Array.from({ length: n }, () => spawn(true));
+  };
+  const spawn = anywhere => ({
+    x: Math.random() * w, y: anywhere ? Math.random() * h : h + 10,
+    r: Math.random() * 1.4 + .3, vy: -(Math.random() * .25 + .06), vx: (Math.random() - .5) * .12,
+    a: Math.random() * .6 + .2, t: Math.random() * Math.PI * 2, s: Math.random() * .02 + .008
+  });
+  const frame = () => {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of parts) {
+      p.x += p.vx; p.y += p.vy; p.t += p.s;
+      if (p.y < -10) Object.assign(p, spawn(false));
+      const a = p.a * (.55 + .45 * Math.sin(p.t));
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(240, 210, 150, ${a})`; ctx.shadowColor = 'rgba(240,200,120,.8)'; ctx.shadowBlur = p.r * 6;
+      ctx.fill();
+    }
+    raf = requestAnimationFrame(frame);
+  };
+  size(); addEventListener('resize', size);
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting && !running) { running = true; frame(); }
+    else if (!e.isIntersecting && running) { running = false; cancelAnimationFrame(raf); }
+  }).observe(c);
+}
+
 /* ================= Boot ================= */
 $('#year').textContent = new Date().getFullYear();
+startIntro();
+startDust();
+watchReveals();
 const cached = readCache();
 content = cached.content;
 bindContent();

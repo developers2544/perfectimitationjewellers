@@ -21,13 +21,16 @@ supabase/schema.sql      <- Supabase me ek baar run karna hai
 5. **Project Settings → API**: `Project URL` aur `anon public` key copy karo aur
    `public/assets/js/supabase-config.js` me paste karo.
 
-## 2. Cloudflare Pages deploy
+## 2. Cloudflare Pages deploy (Workers nahi, Pages)
 1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Upload assets** (ya GitHub repo connect).
 2. Upload me sirf **`public` folder** do. Build command: none. Output directory: `public` (Git se ho to).
 3. Deploy. Domain baad me **Custom domains** se add kar dena.
 
+## Photo upload / save par permission error aaye
+Supabase > SQL Editor me `supabase/fix-permissions.sql` run karo, phir admin se dobara try karo.
+
 ## 3. Owner kaise use karega
-- Website ke About section me **"Pravin Lomrod"** naam par **2 baar tap** → admin page khulega → email + password.
+- About section me **Pravin ki photo ya naam par 2 baar tap** → admin page khulega → email + password.
 - **Products & rates**: naam, type, finish, uses, wholesale rate (from / up to) → **Save changes**.
 - **Exclusive**: photo (1 zaroori, 2nd optional) + naam + type/note/rate → **Add item**. Edit, Hide/Show, Move up/down, Delete sab wahi.
   Koi item visible na ho to website par Exclusive section apne aap chhup jata hai.
