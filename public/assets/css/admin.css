@@ -1,9 +1,9 @@
 :root {
   --velvet: #0C0708; --velvet-2: #150E11; --velvet-3: #1F151A;
-  --champagne: #F7D7E4; --gold: #F2247F; --ivory: #FBF2F5; --muted: #AC939C;
+  --champagne: #F7D7E4; --gold: #EC1C72; --ivory: #FBF2F5; --muted: #AC939C;
   --danger: #E88B7E; --ok: #9FD3A5;
-  --line: rgba(255,255,255,.12); --line-strong: rgba(242,36,127,.55);
-  --metal: linear-gradient(135deg, #F2247F 0%, #D1035E 52%, #9C0147 100%);
+  --line: rgba(255,255,255,.12); --line-strong: rgba(236,28,114,.55);
+  --metal: linear-gradient(135deg, #EC1C72 0%, #C80256 52%, #94013F 100%);
   --serif: 'Fraunces', Georgia, serif;
   --sans: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
   --pad: clamp(16px, 4vw, 32px);

@@ -21,7 +21,12 @@ supabase/schema.sql      <- Supabase me ek baar run karna hai
 5. **Project Settings → API**: `Project URL` aur `anon public` key copy karo aur
    `public/assets/js/supabase-config.js` me paste karo.
 
-## 2. Cloudflare Pages deploy (Workers nahi, Pages)
+## 2. Cloudflare deploy
+Repo me `wrangler.jsonc` hai, jo `public` folder ko site ki tarah serve karta hai.
+GitHub repo Cloudflare se connected hai, to har `git push` par naya deploy ho jata hai.
+Manual deploy: `npx wrangler login` phir `npx wrangler deploy`.
+
+## Purana (Pages ke through) deploy
 1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Upload assets** (ya GitHub repo connect).
 2. Upload me sirf **`public` folder** do. Build command: none. Output directory: `public` (Git se ho to).
 3. Deploy. Domain baad me **Custom domains** se add kar dena.

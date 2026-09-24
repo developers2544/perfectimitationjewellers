@@ -1,5 +1,5 @@
-import { SUPABASE_URL, SUPABASE_ANON_KEY, STORAGE_BUCKET, isConfigured } from './supabase-config.js?v=20260924a';
-import { mergeContent } from './data.js?v=20260924a';
+import { SUPABASE_URL, SUPABASE_ANON_KEY, STORAGE_BUCKET, isConfigured } from './supabase-config.js?v=20260924c';
+import { mergeContent } from './data.js?v=20260924c';
 
 const CACHE_KEY = 'pij-cache-v1';
 let _client = null;
