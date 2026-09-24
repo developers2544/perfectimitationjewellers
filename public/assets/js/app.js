@@ -1,5 +1,5 @@
-import { IMAGES, PRODUCT_ORDER } from './data.js';
-import { loadAll, readCache } from './store.js';
+import { IMAGES, PRODUCT_ORDER } from './data.js?v=20260924a';
+import { loadAll, readCache } from './store.js?v=20260924a';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];

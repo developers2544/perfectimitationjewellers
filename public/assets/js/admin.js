@@ -1,8 +1,8 @@
-import { IMAGES, PRODUCT_ORDER } from './data.js';
+import { IMAGES, PRODUCT_ORDER } from './data.js?v=20260924a';
 import {
   isConfigured, loadAll, getSession, signIn, signOut, saveContent,
   listExclusiveAll, upsertExclusive, deleteExclusive, uploadImage, removeImages
-} from './store.js';
+} from './store.js?v=20260924a';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
