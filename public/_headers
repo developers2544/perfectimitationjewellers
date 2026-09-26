@@ -22,6 +22,13 @@
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
+/sitemap.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+
 /admin*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
